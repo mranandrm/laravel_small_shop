@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'image_path'
     ];
 
     /**
@@ -44,5 +45,28 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+
+     protected $appends = ['avatar'];
+
+    public function getAvatarAttribute() {
+        return "https://gravatar.com/avatar/" . md5( strtolower( trim( $this-> email) ) );
+    }
+
+     public function setImagePathAttribute($value)
+    {
+        $this->attributes['image_path'] = $value;
+    }
+
+      public static function getFullPath($record)
+    {
+        // Assuming your images are stored in the public directory
+        
+        // $basePath = config('app.url') . '/storage/';
+
+        $basePath = env('APP_URL') . '/storage/';
+
+        return $basePath . $record;
     }
 }
